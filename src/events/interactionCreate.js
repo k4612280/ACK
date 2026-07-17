@@ -35,10 +35,11 @@ module.exports = {
 
                             case "prison":
 
-                                await interaction.reply({
-                                    content: "🚔 سيتم قريبًا فتح نموذج سجن اللاعب.",
-                                    ephemeral: true
-                                });
+const prisonModal = require("../modals/prisonModal");
+
+await interaction.showModal(
+prisonModal()
+);
 
                                 break;
 
