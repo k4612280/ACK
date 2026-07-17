@@ -1,3 +1,5 @@
+const prisonModal = require("../modals/prisonModal");
+
 module.exports = {
 
     name: "interactionCreate",
@@ -35,18 +37,16 @@ module.exports = {
 
                             case "prison":
 
-const prisonModal = require("../modals/prisonModal");
-
-await interaction.showModal(
-prisonModal()
-);
+                                await interaction.showModal(
+                                    prisonModal()
+                                );
 
                                 break;
 
                             case "release":
 
                                 await interaction.reply({
-                                    content: "🔓 سيتم قريبًا فتح نموذج إطلاق السراح.",
+                                    content: "🔓 سيتم قريبًا نظام إطلاق السراح.",
                                     ephemeral: true
                                 });
 
@@ -55,7 +55,7 @@ prisonModal()
                             case "fingerprint":
 
                                 await interaction.reply({
-                                    content: "🪪 سيتم قريبًا فتح نظام بصمة الضباط.",
+                                    content: "🪪 سيتم قريبًا نظام بصمة الضباط.",
                                     ephemeral: true
                                 });
 
@@ -64,7 +64,7 @@ prisonModal()
                             case "violations":
 
                                 await interaction.reply({
-                                    content: "📑 سيتم قريبًا فتح نظام المخالفات.",
+                                    content: "📑 سيتم قريبًا نظام المخالفات.",
                                     ephemeral: true
                                 });
 
@@ -73,7 +73,7 @@ prisonModal()
                             case "requests":
 
                                 await interaction.reply({
-                                    content: "📨 سيتم قريبًا فتح طلبات السجناء.",
+                                    content: "📨 سيتم قريبًا نظام طلبات السجناء.",
                                     ephemeral: true
                                 });
 
@@ -85,10 +85,41 @@ prisonModal()
 
                 }
 
+                return;
+
             }
 
             // المودال
             if (interaction.isModalSubmit()) {
+
+                switch (interaction.customId) {
+
+                    case "prison_modal": {
+
+                        const user = interaction.fields.getTextInputValue("user");
+                        const reason = interaction.fields.getTextInputValue("reason");
+                        const time = interaction.fields.getTextInputValue("time");
+                        const caseNumber = interaction.fields.getTextInputValue("case");
+
+                        await interaction.reply({
+
+                            ephemeral: true,
+
+                            content:
+`✅ تم تسجيل بيانات السجن
+
+👤 السجين: ${user}
+📄 السبب: ${reason}
+⏳ المدة: ${time} دقيقة
+📁 رقم القضية: ${caseNumber}`
+
+                        });
+
+                        break;
+
+                    }
+
+                }
 
                 return;
 
@@ -101,8 +132,11 @@ prisonModal()
             if (!interaction.replied && !interaction.deferred) {
 
                 await interaction.reply({
-                    content: "❌ حدث خطأ.",
+
+                    content: "❌ حدث خطأ أثناء تنفيذ العملية.",
+
                     ephemeral: true
+
                 });
 
             }
