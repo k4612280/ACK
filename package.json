@@ -7,10 +7,19 @@
     "start": "node index.js",
     "dev": "nodemon index.js"
   },
+  "keywords": [
+    "discord",
+    "government",
+    "prison",
+    "bot"
+  ],
+  "author": "Khalid",
+  "license": "MIT",
   "dependencies": {
-    "better-sqlite3": "^11.7.0",
+    "better-sqlite3": "^11.10.0",
     "discord.js": "^14.21.0",
-    "dotenv": "^16.5.0"
+    "dotenv": "^16.6.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "nodemon": "^3.1.10"
