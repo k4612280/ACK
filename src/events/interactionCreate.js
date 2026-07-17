@@ -1,4 +1,8 @@
 const prisonModal = require("../modals/prisonModal");
+const releaseModal = require("../modals/releaseModal");
+const fingerprintModal = require("../modals/fingerprintModal");
+const violationModal = require("../modals/violationModal");
+const requestModal = require("../modals/requestModal");
 
 module.exports = {
 
@@ -8,7 +12,6 @@ module.exports = {
 
         try {
 
-            // أوامر السلاش
             if (interaction.isChatInputCommand()) {
 
                 const command = client.commands.get(interaction.commandName);
@@ -19,77 +22,66 @@ module.exports = {
 
             }
 
-            // الأزرار
             if (interaction.isButton()) {
 
                 return;
 
             }
 
-            // المنيو
             if (interaction.isStringSelectMenu()) {
 
-                switch (interaction.customId) {
+                if (interaction.customId === "officers_menu") {
 
-                    case "officers_menu":
+                    switch (interaction.values[0]) {
 
-                        switch (interaction.values[0]) {
+                        case "prison":
 
-                            case "prison":
+                            await interaction.showModal(
+                                prisonModal()
+                            );
 
-                                await interaction.showModal(
-                                    prisonModal()
-                                );
+                            break;
 
-                                break;
+                        case "release":
 
-                            case "release":
+                            await interaction.showModal(
+                                releaseModal()
+                            );
 
-                                await interaction.reply({
-                                    content: "🔓 سيتم قريبًا نظام إطلاق السراح.",
-                                    ephemeral: true
-                                });
+                            break;
 
-                                break;
+                        case "fingerprint":
 
-                            case "fingerprint":
+                            await interaction.showModal(
+                                fingerprintModal()
+                            );
 
-                                await interaction.reply({
-                                    content: "🪪 سيتم قريبًا نظام بصمة الضباط.",
-                                    ephemeral: true
-                                });
+                            break;
 
-                                break;
+                        case "violations":
 
-                            case "violations":
+                            await interaction.showModal(
+                                violationModal()
+                            );
 
-                                await interaction.reply({
-                                    content: "📑 سيتم قريبًا نظام المخالفات.",
-                                    ephemeral: true
-                                });
+                            break;
 
-                                break;
+                        case "requests":
 
-                            case "requests":
+                            await interaction.showModal(
+                                requestModal()
+                            );
 
-                                await interaction.reply({
-                                    content: "📨 سيتم قريبًا نظام طلبات السجناء.",
-                                    ephemeral: true
-                                });
+                            break;
 
-                                break;
+                    }
 
-                        }
-
-                        break;
+                    return;
 
                 }
 
-                return;
-
             }
 
-            // المودال
             if (interaction.isModalSubmit()) {
 
                 switch (interaction.customId) {
@@ -106,13 +98,80 @@ module.exports = {
                             ephemeral: true,
 
                             content:
-`✅ تم تسجيل بيانات السجن
+`✅ تم تسجيل السجين
 
-👤 السجين: ${user}
-📄 السبب: ${reason}
-⏳ المدة: ${time} دقيقة
-📁 رقم القضية: ${caseNumber}`
+👤 ${user}
+📄 ${reason}
+⏳ ${time} دقيقة
+📁 القضية ${caseNumber}`
 
+                        });
+
+                        break;
+
+                    }
+                    case "release_modal": {
+
+                        const user = interaction.fields.getTextInputValue("user");
+                        const reason = interaction.fields.getTextInputValue("reason");
+
+                        await interaction.reply({
+                            ephemeral: true,
+                            content:
+`✅ تم تسجيل طلب إطلاق السراح
+
+👤 ${user}
+📄 ${reason}`
+                        });
+
+                        break;
+
+                    }
+
+                    case "fingerprint_modal": {
+
+                        const fingerprint = interaction.fields.getTextInputValue("fingerprint");
+
+                        await interaction.reply({
+                            ephemeral: true,
+                            content:
+`✅ تم تسجيل البصمة
+
+🪪 ${fingerprint}`
+                        });
+
+                        break;
+
+                    }
+
+                    case "violation_modal": {
+
+                        const user = interaction.fields.getTextInputValue("user");
+                        const reason = interaction.fields.getTextInputValue("reason");
+
+                        await interaction.reply({
+                            ephemeral: true,
+                            content:
+`✅ تم تسجيل المخالفة
+
+👤 ${user}
+📄 ${reason}`
+                        });
+
+                        break;
+
+                    }
+
+                    case "request_modal": {
+
+                        const request = interaction.fields.getTextInputValue("request");
+
+                        await interaction.reply({
+                            ephemeral: true,
+                            content:
+`✅ تم إرسال الطلب
+
+📨 ${request}`
                         });
 
                         break;
@@ -132,11 +191,8 @@ module.exports = {
             if (!interaction.replied && !interaction.deferred) {
 
                 await interaction.reply({
-
                     content: "❌ حدث خطأ أثناء تنفيذ العملية.",
-
                     ephemeral: true
-
                 });
 
             }
