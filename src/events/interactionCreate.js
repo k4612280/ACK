@@ -4,35 +4,105 @@ module.exports = {
 
     async execute(interaction, client) {
 
-        if (interaction.isChatInputCommand()) {
+        try {
 
-            const command = client.commands.get(interaction.commandName);
+            // أوامر السلاش
+            if (interaction.isChatInputCommand()) {
 
-            if (!command) return;
+                const command = client.commands.get(interaction.commandName);
 
-            try {
+                if (!command) return;
 
-                await command.execute(interaction, client);
+                return await command.execute(interaction, client);
 
-            } catch (error) {
+            }
 
-                console.error(error);
+            // الأزرار
+            if (interaction.isButton()) {
 
-                if (interaction.replied || interaction.deferred) {
+                return;
 
-                    await interaction.followUp({
-                        content: "حدث خطأ أثناء تنفيذ الأمر.",
-                        ephemeral: true
-                    });
+            }
 
-                } else {
+            // المنيو
+            if (interaction.isStringSelectMenu()) {
 
-                    await interaction.reply({
-                        content: "حدث خطأ أثناء تنفيذ الأمر.",
-                        ephemeral: true
-                    });
+                switch (interaction.customId) {
+
+                    case "officers_menu":
+
+                        switch (interaction.values[0]) {
+
+                            case "prison":
+
+                                await interaction.reply({
+                                    content: "🚔 سيتم قريبًا فتح نموذج سجن اللاعب.",
+                                    ephemeral: true
+                                });
+
+                                break;
+
+                            case "release":
+
+                                await interaction.reply({
+                                    content: "🔓 سيتم قريبًا فتح نموذج إطلاق السراح.",
+                                    ephemeral: true
+                                });
+
+                                break;
+
+                            case "fingerprint":
+
+                                await interaction.reply({
+                                    content: "🪪 سيتم قريبًا فتح نظام بصمة الضباط.",
+                                    ephemeral: true
+                                });
+
+                                break;
+
+                            case "violations":
+
+                                await interaction.reply({
+                                    content: "📑 سيتم قريبًا فتح نظام المخالفات.",
+                                    ephemeral: true
+                                });
+
+                                break;
+
+                            case "requests":
+
+                                await interaction.reply({
+                                    content: "📨 سيتم قريبًا فتح طلبات السجناء.",
+                                    ephemeral: true
+                                });
+
+                                break;
+
+                        }
+
+                        break;
 
                 }
+
+            }
+
+            // المودال
+            if (interaction.isModalSubmit()) {
+
+                return;
+
+            }
+
+        } catch (error) {
+
+            console.error(error);
+
+            if (!interaction.replied && !interaction.deferred) {
+
+                await interaction.reply({
+                    content: "❌ حدث خطأ.",
+                    ephemeral: true
+                });
 
             }
 
