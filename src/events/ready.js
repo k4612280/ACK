@@ -1,3 +1,5 @@
+const db = require("../database/init");
+
 module.exports = {
 
     name: "ready",
@@ -8,11 +10,15 @@ module.exports = {
 
         console.clear();
 
-        console.log("====================================");
-        console.log("Government System");
-        console.log(`Logged in as ${client.user.tag}`);
-        console.log(`Bot ID: ${client.user.id}`);
-        console.log("====================================");
+        console.log("======================================");
+        console.log("🏛 Government System");
+        console.log(`🤖 ${client.user.tag}`);
+        console.log(`🆔 ${client.user.id}`);
+        console.log("======================================");
+
+        db.prepare("SELECT 1").get();
+
+        console.log("✅ Database Connected");
 
         client.user.setActivity("Government System");
 
